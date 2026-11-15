@@ -7,8 +7,7 @@
 第一次使用只需要走完「装环境 → 解压 → 启动 → 登录」。这个入口在当前电脑运行 Hub（后台服务）、浏览器管理端和桌面客户端，使用独立 SQLite 数据库。没有服务器也可以体验。
 
 ## 装环境、解压、启动
-
-1. 安装 [Python 3.12+](https://www.python.org/downloads/) 和 [Node.js 22.19+](https://nodejs.org/)。Windows 安装 Python 时勾选 **Add Python to PATH**；Node 安装保留默认选项及 npm。安装完成后关掉旧终端。
+1. 安装 [Python 3.12+](https://www.python.org/downloads/) 和 [Node.js 22.19+](https://nodejs.org/)。Windows 安装 Python 时勾选 **Add Python to PFATH**；Node 安装保留默认选项及 npm。安装完成后关掉旧终端。
 2. 下载源码 ZIP，选择「全部解压」。建议放到自己有写入权限的普通目录，例如 `C:/SoduWork`；不要放进系统程序目录，也不要在 ZIP 里直接运行。
 3. 打开包含 `README.md`、`start.py`、`client` 的目录，按系统启动：
 
@@ -22,6 +21,8 @@
 5. 保持窗口打开。启动器自动安装依赖、构建管理页面、准备数据库并打开客户端。首次依赖下载可能耗时数分钟；长步骤每隔约 15 秒显示仍在进行。可以从窗口打印的 `startup.log` 路径查看详情。
 
 不需要手动创建数据库、安装 Docker、安装 Git、准备 `.env` 或分别运行三个工程的安装命令。首次需联网下载依赖，后续复用已安装内容。
+
+
 
 启动器会在专用 `venv/` 中安装 Hub 和 Runner 两套依赖，检查 Runner 所需的 Python 模块，并把同一解释器交给桌面端。使用此入口无需另建 `hub-backend/.venv`。如果 Agent 管理提示源码 Runner 环境不完整，请退出源码启动会话后重跑同一入口，保留原数据目录。
 
@@ -138,6 +139,18 @@ npm 注册表与二进制下载使用不同的地址。设置 npm 镜像只改�
 | npm 包 | `npm_config_registry` 或 npm 的 `registry` 配置 |
 | Electron 二进制 | `ELECTRON_MIRROR`，见下面的桌面启动排障 |
 | Windows PortableGit 归档 | `SODUWORK_PORTABLE_GIT_MIRROR`，见下面的镜像与离线说明 |
+
+| pip 包（Python 依赖） | PIP_INDEX_URL，见下方示例 |
+pip 阶段（[2/4] 安装服务依赖）访问默认索引较慢时，可用 PIP_INDEX_URL 指定索引，只对本次启动生效：
+macOS/Linux：
+PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple sh start.sh --desktop
+Windows PowerShell：
+$env:PIP_INDEX_URL = 'https://pypi.tuna.tsinghua.edu.cn/simple'
+.\start.cmd --desktop
+Windows 命令提示符：
+set PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+start.cmd --desktop
+与 npm 镜像一样，已完成的步骤会复用，中断后重跑不会重复下载。
 
 #### 使用代理下载
 
